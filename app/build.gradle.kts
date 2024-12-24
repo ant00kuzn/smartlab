@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation (libs.androidx.navigation.compose)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.datastore.preferences.v100)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

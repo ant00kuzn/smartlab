@@ -17,3 +17,5 @@ val TextButtonColor = Color(0xFF57A9FF)
 val InputBGColor = Color(0xFFF5F5F9)
 val InputFocusedBorderColor = Color(0xFFB8C1CC)
 val InputStrokeColor = Color(0xFFEBEBEB)
+
+val disabledButtonColor = Color(0xFFC9D4FB)

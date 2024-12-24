@@ -11,7 +11,8 @@ import com.example.smartlab.ui.theme.TextButtonColor
 
 @Composable
 fun TextButton(
-    modifier: Modifier = Modifier, text: String,
+    modifier: Modifier = Modifier,
+    text: String,
     onClick: () -> Unit = { }
 ) {
    Text(

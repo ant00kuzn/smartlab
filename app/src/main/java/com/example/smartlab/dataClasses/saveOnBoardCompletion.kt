@@ -1,23 +1,21 @@
 package com.example.smartlab.dataClasses
 
 import android.content.Context
-import androidx.preference.PreferenceManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import android.content.SharedPreferences
 
-class SharedPreferencesManager(context: Context) {
+class PreferencesManager(context: Context) {
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("SP", Context.MODE_PRIVATE)
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-    suspend fun setBoolean(key: String, value: Boolean) {
-        withContext(Dispatchers.IO) {
-            sharedPreferences.edit().putBoolean(key, value).apply()
-        }
+    fun saveData(key: String, value: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(key, value)
+        editor.putString(key, value)
+        editor.putString(key, value)
+        editor.apply()
     }
 
-    suspend fun getBoolean(key: String, defaultValue: Boolean): Boolean {
-        return withContext(Dispatchers.IO){
-            sharedPreferences.getBoolean(key, defaultValue)
-        }
+    fun getData(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 }

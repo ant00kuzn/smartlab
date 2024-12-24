@@ -1,9 +1,12 @@
 package com.example.smartlab.code
 
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -11,11 +14,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
 import com.example.smartlab.dataClasses.PageInfo
+import com.example.smartlab.dataClasses.PreferencesManager
 import com.example.smartlab.ui.Screens.OnBoard
 
 @Composable
-fun onBoardQueue(modifier: Modifier = Modifier, navController: NavController) {
+fun onBoardQueue(modifier: Modifier = Modifier, navController: NavController, context: Context) {
     val pagerState = rememberPagerState{3}
+
+    val preferencesManager = remember { PreferencesManager(context) }
+    val data = remember { mutableStateOf(preferencesManager.getData("isCompleted", false.toString())) }
+
+    if (data.value == true.toString()){
+        navController.navigate("auth")
+    }
+
     val pagesInQueue = listOf(
         PageInfo(
             dataText = "Пропустить",
