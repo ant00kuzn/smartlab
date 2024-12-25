@@ -1,7 +1,8 @@
 package com.example.smartlab.code
 
-import android.text.TextUtils
+import java.util.regex.Pattern
 
-fun String.isEmailValid(): Boolean {
-    return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun isValidEmail(email: String): Boolean {
+    val emailRegex = """^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$"""
+    return Pattern.compile(emailRegex).matcher(email).matches()
 }

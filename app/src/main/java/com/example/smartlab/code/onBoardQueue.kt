@@ -5,9 +5,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,12 +24,19 @@ import com.example.smartlab.ui.Screens.OnBoard
 @Composable
 fun onBoardQueue(modifier: Modifier = Modifier, navController: NavController, context: Context) {
     val pagerState = rememberPagerState{3}
-
+    val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    val data = remember { mutableStateOf(preferencesManager.getData("isCompleted", false.toString())) }
+    var isCompleted by remember { mutableStateOf<Boolean?>(null) }
 
-    if (data.value == true.toString()){
+    LaunchedEffect(Unit){
+        isCompleted = preferencesManager.getData("isCompleted", false.toString()).toBoolean()
+    }
+    if (isCompleted == null){
+        return
+    }
+    if (isCompleted == true) {
         navController.navigate("auth")
+        return
     }
 
     val pagesInQueue = listOf(
@@ -49,7 +60,7 @@ fun onBoardQueue(modifier: Modifier = Modifier, navController: NavController, co
             dataDescriptionText = "Наши врачи всегда наблюдают \n" +
                     "за вашими показателями здоровья",
             dotImg = R.drawable.dot3,
-            onBoardImg = R.drawable.onboard2
+            onBoardImg = R.drawable.onboard3
         )
     )
 

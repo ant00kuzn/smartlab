@@ -7,10 +7,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartlab.R
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.disabledButtonColor
 
@@ -27,7 +30,7 @@ fun PrimaryButton(
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = AccentColor,
+            containerColor = Color(0xFF1A6FEE),
             disabledContainerColor = disabledButtonColor,
             contentColor = Color.White,
             disabledContentColor = Color.White
@@ -36,7 +39,7 @@ fun PrimaryButton(
         Text(
             text = text,
             fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold,
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
             lineHeight = 24.sp
         )
     }

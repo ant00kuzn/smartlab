@@ -3,9 +3,11 @@ package com.example.smartlab.ui.Screens
 import android.graphics.Bitmap
 import android.graphics.Paint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,7 +36,7 @@ import com.example.smartlab.ui.components.TextButton
 @Composable
 fun OnBoard(modifier: Modifier = Modifier, navController: NavController, buttonText: String, onBoardHeaderText: String, onBoardDescriptionText: String, dot: Int, onBoard: Int) {
     Column(
-        modifier = modifier,
+        modifier = modifier.background(Color.White).padding(top=5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Row(modifier = Modifier.fillMaxWidth()){
@@ -70,7 +72,7 @@ fun OnBoard(modifier: Modifier = Modifier, navController: NavController, buttonT
         Image(
             bitmap = ImageBitmap.imageResource(dot),
             contentDescription = null,
-            modifier = Modifier
+            modifier = Modifier.width(58.dp).height(15.dp)
         )
 
         Spacer(modifier = Modifier.height(113.4.dp))
@@ -78,7 +80,7 @@ fun OnBoard(modifier: Modifier = Modifier, navController: NavController, buttonT
         Image(
             bitmap = ImageBitmap.imageResource(onBoard),
             contentDescription = null,
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.example.smartlab.ui.Screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,12 +38,12 @@ import com.example.smartlab.ui.Components.InputCodeFiled
 
 @Composable
 fun GetCode(modifier: Modifier = Modifier, navController: NavController) {
-    Column(modifier = Modifier.fillMaxSize()){
+    Column(modifier = Modifier.fillMaxSize().background(Color.White)){
         Spacer(modifier = Modifier.height(40.dp))
 
         Button(
-            onClick = { navController.navigate("reg") },
-            modifier = Modifier.size(32.dp),
+            onClick = { navController.navigate("auth") },
+            modifier = Modifier.size(32.dp).background(Color(0xFFF5F5F9)),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonColors(
                 Color(0xFFF5F5F9),
@@ -50,8 +53,9 @@ fun GetCode(modifier: Modifier = Modifier, navController: NavController) {
             )
         ) {
             Icon(
-                bitmap = ImageBitmap.imageResource(R.drawable.vector),
-                contentDescription = null
+                bitmap = ImageBitmap.imageResource(R.drawable.icons),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
             )
         }
 
@@ -61,9 +65,10 @@ fun GetCode(modifier: Modifier = Modifier, navController: NavController) {
             Text(
                 text = "Введите код из E-mail",
                 fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.nunito_bold)),
                 lineHeight = 24.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -88,7 +93,7 @@ fun GetCode(modifier: Modifier = Modifier, navController: NavController) {
                 text = "Отправить код повторно можно будет через" + "" + "секунд",
                 modifier = Modifier.width(242.dp),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                 lineHeight = 20.sp,
                 textAlign = TextAlign.Center,
                 softWrap = true,

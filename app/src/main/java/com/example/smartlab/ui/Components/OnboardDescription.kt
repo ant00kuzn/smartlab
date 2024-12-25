@@ -18,7 +18,7 @@ fun OnboardDescription(modifier: Modifier = Modifier, text: String){
         modifier = modifier,
         color = OnboardDescriptionColor,
         fontSize = 14.sp,
-        fontWeight =  FontWeight.Normal,
+        fontFamily = FontFamily(Font(R.font.nunito_semibold)),
         lineHeight = 20.sp
     )
 }

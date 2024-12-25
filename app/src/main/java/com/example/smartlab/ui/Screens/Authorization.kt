@@ -33,9 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.example.smartlab.R
-import com.example.smartlab.code.isEmailValid
+import com.example.smartlab.code.isValidEmail
 import com.example.smartlab.code.sha256
 import com.example.smartlab.dataClasses.PreferencesManager
 import com.example.smartlab.ui.Components.PrimaryButton
@@ -53,7 +57,6 @@ import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
-import com.example.smartlab.ui.theme.TextButtonColor
 
 @SuppressLint("RememberReturnType")
 @Composable
@@ -66,25 +69,28 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
     val email = remember { mutableStateOf(preferencesManager.getData("email", "")) }
     val passHash = remember { mutableStateOf(preferencesManager.getData("password", "")) }
 
-    var visibility = false
-    var img = R.drawable.eye_closed
+    var passwordVisible by remember { mutableStateOf(false) }
+    var icon = if (passwordVisible) R.drawable.eye_open else R.drawable.eye_closed
 
-    val visible = @Composable {
-        if (visibility){
-            img = R.drawable.eye_open
-        }
+    var isErrorState by remember { mutableStateOf(false) }
 
+    LaunchedEffect(textEmail){
+        isErrorState = !isValidEmail(textEmail)
+    }
+
+    val trailingIcon = @Composable {
         Icon(
-            bitmap = ImageBitmap.imageResource(img),
+            painter = BitmapPainter(ImageBitmap.imageResource(id = icon)),
             contentDescription = null,
             modifier = Modifier.size(14.dp).clickable {
-                visibility = !visibility
+                passwordVisible = !passwordVisible
             }
         )
     }
 
     Column(
         modifier = Modifier
+            .background(Color.White)
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ){
@@ -97,9 +103,10 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
             Text(
                 text = "Добро пожаловать!",
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.nunito_black)),
                 lineHeight = 28.sp,
-                letterSpacing = 0.033.sp
+                letterSpacing = 0.033.sp,
+                color = Color(0xFF000000)
             )
         }
 
@@ -108,8 +115,9 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
         Text(
             text = textDescription,
             fontSize = 15.sp,
-            fontWeight = FontWeight.W400,
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
             lineHeight = 20.sp,
+            color = Color.Black,
             softWrap = true,
             maxLines = 2
         )
@@ -119,7 +127,7 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
         Text(
             text= "E-mail",
             fontSize = 14.sp,
-            fontWeight = FontWeight.W400,
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
             lineHeight = 14.sp,
             color = Color(0xFF7E7E9A)
         )
@@ -129,13 +137,13 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
         OutlinedTextField(
             value = textEmail,
             onValueChange = { textEmail = it },
-            isError = textEmail.isEmailValid(),
+            isError = isErrorState,
             modifier = modifier.fillMaxWidth(),
             placeholder = {
                 Text(
                     text = "example@mail.ru",
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                     lineHeight = 20.sp
                 )
             },
@@ -146,7 +154,10 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 unfocusedPlaceholderColor = Color.Black.copy(alpha = 0.5f),
                 focusedBorderColor = InputFocusedBorderColor,
                 unfocusedBorderColor = InputStrokeColor,
-                cursorColor = AccentColor
+                cursorColor = AccentColor,
+                focusedTextColor = Color(0xFF000000),
+                unfocusedTextColor = Color(0xF0000000),
+                errorTextColor = Color.Black
             ),
             shape = RoundedCornerShape(10.dp)
         )
@@ -156,7 +167,7 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
         Text(
             text= "Password",
             fontSize = 14.sp,
-            fontWeight = FontWeight.W400,
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
             lineHeight = 14.sp,
             color = Color(0xFF7E7E9A)
         )
@@ -169,7 +180,7 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
             modifier = modifier.fillMaxWidth(),
             placeholder = {
                 Text(
-                    text = "*****",
+                    text = "*********",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal,
                     lineHeight = 20.sp
@@ -182,10 +193,15 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 unfocusedPlaceholderColor = Color.Black.copy(alpha = 0.5f),
                 focusedBorderColor = InputFocusedBorderColor,
                 unfocusedBorderColor = InputStrokeColor,
-                cursorColor = AccentColor
+                cursorColor = AccentColor,
+                focusedTrailingIconColor = Color.Black,
+                unfocusedTrailingIconColor = Color.Black,
+                focusedTextColor = Color(0xFF000000),
+                unfocusedTextColor = Color(0xF0000000)
             ),
             shape = RoundedCornerShape(10.dp),
-            trailingIcon = visible
+            trailingIcon = trailingIcon,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -194,15 +210,16 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
             modifier = Modifier
                 .height(56.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate("getCode") },
+            onClick = {
+                navController.navigate("getCode") },
             text = "Далее",
-            enabled = if (textPassword != "" && textEmail.length >= 6) true else false
+            enabled = if (textEmail != "" && textPassword.length >= 6) true else false
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth().height(20.dp),
+            modifier = Modifier.fillMaxWidth().height(25.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -210,9 +227,10 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 text = textUnderBut,
                 modifier = Modifier,
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.nunito_bold)),
                 lineHeight = 20.sp,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.width(3.dp))
@@ -227,10 +245,10 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                             navController.navigate("reg")
                         }
                     },
-                color = TextButtonColor,
                 fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Start
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Start,
+                color = Color(0xFF1A6FEE)
             )
         }
     }
