@@ -3,6 +3,7 @@ package com.example.smartlab.ui.Screens
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,14 +50,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.example.smartlab.R
+import com.example.smartlab.code.RetrofitHelper
 import com.example.smartlab.code.isValidEmail
 import com.example.smartlab.code.sha256
 import com.example.smartlab.dataClasses.PreferencesManager
+import com.example.smartlab.dataClasses.User
 import com.example.smartlab.ui.Components.PrimaryButton
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @SuppressLint("RememberReturnType")
 @Composable
@@ -211,7 +217,17 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 .height(56.dp)
                 .fillMaxWidth(),
             onClick = {
-                navController.navigate("getCode") },
+                RetrofitHelper.usersInterface.getUser(User(type = "email", phone = "anton.kuznetsov.is21b@mail.ru", token = "123456")).enqueue(object: Callback<Void> {
+                    override fun onResponse(p0: Call<Void>, p1: Response<Void>) {
+                        Log.v("ddfa", "${p1.body()}")
+                    }
+
+                    override fun onFailure(p0: Call<Void>, p1: Throwable) {
+                        Log.e("getUsers", p1?.message.toString())
+                    }
+                })
+                    
+                navController.navigate("homeScreen") },
             text = "Далее",
             enabled = if (textEmail != "" && textPassword.length >= 6) true else false
         )

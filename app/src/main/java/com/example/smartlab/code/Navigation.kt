@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.dataClasses.PreferencesManager
 import com.example.smartlab.ui.Screens.Authorization
 import com.example.smartlab.ui.Screens.GetCode
+import com.example.smartlab.ui.Screens.HomeScreen
 
 @Composable
 fun Navigation(modifier: Modifier = Modifier, context: Context){
@@ -42,6 +43,9 @@ fun Navigation(modifier: Modifier = Modifier, context: Context){
         }
         composable("getCode") {
             GetCode(navController = navController)
+        }
+        composable("homeScreen"){
+            HomeScreen()
         }
     }
 }

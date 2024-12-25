@@ -42,7 +42,7 @@ fun CustBut(modifier: Modifier = Modifier, text: String) {
             color = Color.Black,
             fontSize = 24.sp,
             lineHeight = 28.sp,
-            //fontFamily = FontFamily(Font(R.font.nunito_bold)),
+            fontFamily = FontFamily(Font(R.font.nunito_bold)),
             letterSpacing = 0.033.sp,
             textAlign = TextAlign.Center
         )

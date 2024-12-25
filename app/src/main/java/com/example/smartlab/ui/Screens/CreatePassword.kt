@@ -49,7 +49,7 @@ fun CreatePassword(modifier: Modifier = Modifier, navController: NavController) 
                 .align(Alignment.End),
             color = Color(0xFF1A6FEE),
             fontSize = 15.sp,
-            //fontFamily = FontFamily(Font(R.font.nunito_semibold)),
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
             lineHeight = 20.sp,
             textAlign = TextAlign.End
         )
@@ -62,7 +62,7 @@ fun CreatePassword(modifier: Modifier = Modifier, navController: NavController) 
             fontSize = 24.sp,
             lineHeight = 28.sp,
             letterSpacing = 0.033.sp,
-            //fontFamily = FontFamily(Font(R.font.nunito_bold))
+            fontFamily = FontFamily(Font(R.font.nunito_bold))
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -72,7 +72,7 @@ fun CreatePassword(modifier: Modifier = Modifier, navController: NavController) 
             color = Color(0xFF939396),
             fontSize = 15.sp,
             lineHeight = 20.sp,
-            //fontFamily = FontFamily(Font(R.font.nunito_semibold))
+            fontFamily = FontFamily(Font(R.font.nunito_semibold))
         )
 
         Spacer(modifier = Modifier.height(56.dp))
