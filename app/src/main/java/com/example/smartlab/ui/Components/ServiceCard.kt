@@ -30,9 +30,9 @@ import com.example.smartlab.dataClasses.ServiceItem
 import com.example.smartlab.ui.theme.InputBGColor
 
 @Composable
-fun ServiceCard(service: ServiceItem) {
+fun ServiceCard(modifier: Modifier = Modifier, service: ServiceItem) {
     Card(
-        modifier = Modifier.width(335.dp).height(136.dp),
+        modifier = modifier.width(335.dp).height(136.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = InputBGColor)
     ) {

@@ -68,6 +68,7 @@ fun GetCode(modifier: Modifier = Modifier, navController: NavController, context
 
     val preferencesManager = remember { PreferencesManager(context) }
     val email = remember { mutableStateOf(preferencesManager.getData("email", "")) }
+    val password = remember { mutableStateOf(preferencesManager.getData("passHash", "")) }
 
     Column(modifier = Modifier.fillMaxSize().background(Color.White).padding(horizontal=20.dp)){
         Spacer(modifier = Modifier.height(40.dp))
@@ -105,7 +106,7 @@ fun GetCode(modifier: Modifier = Modifier, navController: NavController, context
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            ResendCodeTimer(email.value)
+            ResendCodeTimer(email.value, password.value)
         }
     }
 }

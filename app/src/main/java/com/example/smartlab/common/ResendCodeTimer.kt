@@ -16,19 +16,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartlab.R
-import com.example.smartlab.code.sendCode
+import com.example.smartlab.code.setUser
 import kotlinx.coroutines.delay
 
 @Composable
-fun ResendCodeTimer(email: String) {
-    var secondsLeft by remember { mutableStateOf(60) }
+fun ResendCodeTimer(email: String, password: String) {
+    var secondsLeft by remember { mutableStateOf(120) }
 
     LaunchedEffect(Unit) {
         while (secondsLeft > 0) {
             delay(1000)
             secondsLeft--
         }
-        sendCode(email)
+        setUser(email, password)
     }
 
     Text(

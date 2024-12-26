@@ -5,6 +5,12 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -13,14 +19,13 @@ import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,35 +49,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.example.smartlab.dataClasses.NewsItem
+import androidx.navigation.compose.rememberNavController
+import com.example.smartlab.code.RetrofitHelper
+import com.example.smartlab.code.getAct
+import com.example.smartlab.dataClasses.Actions
 import com.example.smartlab.dataClasses.ServiceItem
 import com.example.smartlab.ui.Components.CategoryButton
 import com.example.smartlab.ui.Components.NewsCard
 import com.example.smartlab.ui.Components.ServiceCard
-import com.google.accompanist.swiperefresh.SwipeRefresh
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val textState = remember { mutableStateOf("") }
-    val categories = listOf("Все", "ПЦР", "Биохимия", "Иммунология", "Генетика")
     var isNewsVisible by remember { mutableStateOf(true) }
     val scrollState = rememberScrollState()
-    val newsList = listOf(
-        NewsItem("Акция 1", "Описание акции 1", "1000", R.drawable.onboard1),
-        NewsItem("Акция 2", "Описание акции 2", "1500", R.drawable.onboard2),
-        NewsItem("Акция 3", "Описание акции 3", "2000", R.drawable.onboard3)
-    )
-    val services = listOf(
-        ServiceItem("Общий анализ крови", "2 дня", "500", "Добавить"),
-        ServiceItem("Биохимия", "1 день", "700", "Добавить"),
-        ServiceItem("Анализ на гормоны", "3 дня", "900", "Добавить")
-    )
 
-    Scaffold(modifier = androidx.compose.ui.Modifier.nestedScroll(rememberNestedScrollInteropConnection())) { innerPadding ->
+//    var actionsList = remember { mutableStateListOf<Actions>() }
+
+    Scaffold(modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())) { innerPadding ->
+//        actionsList = getAct()
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -92,7 +91,7 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable { navController.navigate("searchResult") },
+                        .clickable { navController.navigate("searchStart") },
                     placeholder = {
                         Text(
                             text = "Искать анализы",
@@ -131,9 +130,9 @@ fun HomeScreen(navController: NavController) {
                             contentPadding = PaddingValues(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            items(newsList) { news ->
-                                NewsCard(news = news)
-                            }
+//                            actionsList.forEach(actions ->
+//
+//                            )
                         }
                     }
                 }
@@ -152,18 +151,27 @@ fun HomeScreen(navController: NavController) {
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(categories) { category ->
-                        CategoryButton(text = category)
-                    }
+//                    items(categories) { category ->
+//                        CategoryButton(text = category)
+//                    }
                 }
 
                 // Список услуг
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    services.forEach { service ->
-                        ServiceCard(service = service)
-                    }
+                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+//                    items(services) { service ->
+//                        ServiceCard(
+//                            modifier = Modifier.padding(16.dp),
+//                            service = service
+//                        )
+//                    }
                 }
-        }
+            }
 
     }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPrev() {
+    HomeScreen(navController = rememberNavController())
 }

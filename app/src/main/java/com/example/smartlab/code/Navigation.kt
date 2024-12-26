@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.ui.Screens.Authorization
+import com.example.smartlab.ui.Screens.CreateCard
 import com.example.smartlab.ui.Screens.GetCode
 import com.example.smartlab.ui.Screens.HomeScreen
 
@@ -42,13 +43,13 @@ fun Navigation(modifier: Modifier = Modifier, context: Context){
             GetCode(navController = navController, context = context)
         }
         composable("homeScreen"){
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable("createPassword"){
             CreatePassword(navController = navController, context)
         }
         composable("createCard") {
-
+            CreateCard(navController = navController)
         }
     }
 }

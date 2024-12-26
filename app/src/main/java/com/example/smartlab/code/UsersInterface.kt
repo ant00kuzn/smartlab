@@ -1,5 +1,6 @@
 package com.example.smartlab.code
 
+import com.example.smartlab.dataClasses.Actions
 import com.example.smartlab.dataClasses.EmailSen
 import com.example.smartlab.dataClasses.ResponceCode
 import com.example.smartlab.dataClasses.SearchResult
@@ -7,6 +8,7 @@ import com.example.smartlab.dataClasses.UserData
 import com.example.smartlab.dataClasses.User
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -20,12 +22,6 @@ interface UsersInterface {
     )
     @POST("auth/v1/signup")
     fun setUser(@Body user: UserData): Call<ResponceCode>
-
-    @Headers(
-        "apikey: $apiKey"
-    )
-    @POST("auth/v1/magiclink")
-    fun getCode(@Body email: EmailSen): Call<ResponceCode>
 
     @Headers(
         "apikey: $apiKey"
@@ -45,5 +41,26 @@ interface UsersInterface {
         "apikey: $apiKey"
     )
     @GET("rest/v1/products?select=*")
-    fun getProducts(@Query("name") queryString: String): Call<SearchResult>
+    fun getProducts(@Query("name") queryString: String): List<SearchResult>
+
+    //products
+    @Headers(
+        "apikey: $apiKey"
+    )
+    @GET("rest/v1/products?select=*")
+    fun getProducts(): List<SearchResult>
+
+    //services
+    @Headers(
+        "apikey: $apiKey"
+    )
+    @GET("rest/v1/services?select=*")
+    fun getServices(): List<SearchResult>
+
+    //actions
+    @Headers(
+        "apikey: $apiKey"
+    )
+    @GET("rest/v1/actions?select=*")
+    fun getActions(): Call<List<Actions>>
 }

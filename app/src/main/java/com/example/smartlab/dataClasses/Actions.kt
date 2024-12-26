@@ -1,8 +1,9 @@
 package com.example.smartlab.dataClasses
 
-data class NewsItem(
+data class Actions(
+    val id: Long,
     val title: String,
     val description: String,
-    val price: String,
-    val image: Int
+    val price: Int,
+    val img: String
 )

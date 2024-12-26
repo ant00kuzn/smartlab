@@ -38,7 +38,7 @@ fun SearchScreenResults() {
             isLoading = true
             coroutineScope.launch {
                 try {
-                    searchResults = getProd(textState)
+                    //searchResults = getProd(textState)
                     delay(1000)
                 } catch (e: Exception) {
                     // Обработка ошибок

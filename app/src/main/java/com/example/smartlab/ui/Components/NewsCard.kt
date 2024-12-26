@@ -25,11 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartlab.R
-import com.example.smartlab.dataClasses.NewsItem
+import com.example.smartlab.dataClasses.Actions
 import com.example.smartlab.ui.theme.InputBGColor
 
 @Composable
-fun NewsCard(news: NewsItem) {
+fun NewsCard(news: Actions) {
     Card(
         modifier = Modifier.size(280.dp, 150.dp),
         shape = RoundedCornerShape(10.dp),
@@ -73,7 +73,7 @@ fun NewsCard(news: NewsItem) {
             }
 
             Image(
-                painter =  painterResource(id = news.image),
+                painter =  painterResource(id = R.drawable.hello),
                 contentDescription = null,
                 modifier = Modifier
                     .weight(1f)
@@ -87,5 +87,5 @@ fun NewsCard(news: NewsItem) {
 @Preview
 @Composable
 private fun NewsCardPrev() {
-    NewsCard(news = NewsItem("Anything", "Nothing", "1000", R.drawable.shape))
+    NewsCard(news = Actions(1, "Anything", "Nothing", 1000, "R.drawable.shape"))
 }

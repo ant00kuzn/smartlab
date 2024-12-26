@@ -49,7 +49,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
 import com.example.smartlab.code.isValidEmail
-import com.example.smartlab.code.sendCode
 import com.example.smartlab.code.sha256
 import com.example.smartlab.code.PreferencesManager
 import com.example.smartlab.code.checkAuth
@@ -215,12 +214,9 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
             onClick = {
                 if (textLink == "Войти") {
                     setUser(textEmail, sha256(textPassword))
-                    Log.v("set us", "${textEmail} ${sha256(textPassword)}")
-                    sendCode(textEmail)
                     navController.navigate("getCode")
                 }else{
                     checkAuth(textEmail, sha256(textPassword))
-                    Log.v("login", "${textEmail} ${sha256(textPassword)}")
                     navController.navigate("createPassword")
                 }
             },
