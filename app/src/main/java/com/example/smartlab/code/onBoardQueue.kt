@@ -13,24 +13,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
 import com.example.smartlab.dataClasses.PageInfo
-import com.example.smartlab.dataClasses.PreferencesManager
 import com.example.smartlab.ui.Screens.OnBoard
 
 @Composable
 fun onBoardQueue(modifier: Modifier = Modifier, navController: NavController, context: Context) {
     val pagerState = rememberPagerState{3}
-    val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    var isCompleted by remember { mutableStateOf<Boolean?>(null) }
+    val isCompleted by remember { mutableStateOf<Boolean?>(preferencesManager.getData("isCompleted", false.toString()).toBoolean()) }
 
-    LaunchedEffect(Unit){
-        isCompleted = preferencesManager.getData("isCompleted", false.toString()).toBoolean()
-    }
     if (isCompleted == null){
         return
     }

@@ -2,13 +2,12 @@ package com.example.smartlab.ui.Screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,21 +47,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.launch
 import com.example.smartlab.R
-import com.example.smartlab.code.RetrofitHelper
 import com.example.smartlab.code.isValidEmail
+import com.example.smartlab.code.sendCode
 import com.example.smartlab.code.sha256
-import com.example.smartlab.dataClasses.PreferencesManager
-import com.example.smartlab.dataClasses.User
+import com.example.smartlab.code.PreferencesManager
+import com.example.smartlab.code.checkAuth
+import com.example.smartlab.code.setUser
 import com.example.smartlab.ui.Components.PrimaryButton
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @SuppressLint("RememberReturnType")
 @Composable
@@ -76,7 +72,7 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
     val passHash = remember { mutableStateOf(preferencesManager.getData("password", "")) }
 
     var passwordVisible by remember { mutableStateOf(false) }
-    var icon = if (passwordVisible) R.drawable.eye_open else R.drawable.eye_closed
+    val icon = if (passwordVisible) R.drawable.eye_open else R.drawable.eye_closed
 
     var isErrorState by remember { mutableStateOf(false) }
 
@@ -217,17 +213,17 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 .height(56.dp)
                 .fillMaxWidth(),
             onClick = {
-                RetrofitHelper.usersInterface.getUser(User(type = "email", phone = "anton.kuznetsov.is21b@mail.ru", token = "123456")).enqueue(object: Callback<Void> {
-                    override fun onResponse(p0: Call<Void>, p1: Response<Void>) {
-                        Log.v("ddfa", "${p1.body()}")
-                    }
-
-                    override fun onFailure(p0: Call<Void>, p1: Throwable) {
-                        Log.e("getUsers", p1?.message.toString())
-                    }
-                })
-                    
-                navController.navigate("homeScreen") },
+                if (textLink == "Войти") {
+                    setUser(textEmail, sha256(textPassword))
+                    Log.v("set us", "${textEmail} ${sha256(textPassword)}")
+                    sendCode(textEmail)
+                    navController.navigate("getCode")
+                }else{
+                    checkAuth(textEmail, sha256(textPassword))
+                    Log.v("login", "${textEmail} ${sha256(textPassword)}")
+                    navController.navigate("createPassword")
+                }
+            },
             text = "Далее",
             enabled = if (textEmail != "" && textPassword.length >= 6) true else false
         )

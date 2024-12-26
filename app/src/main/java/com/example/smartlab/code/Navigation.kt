@@ -1,16 +1,13 @@
 package com.example.smartlab.code
 
+import CreatePassword
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.smartlab.dataClasses.PreferencesManager
 import com.example.smartlab.ui.Screens.Authorization
 import com.example.smartlab.ui.Screens.GetCode
 import com.example.smartlab.ui.Screens.HomeScreen
@@ -42,10 +39,16 @@ fun Navigation(modifier: Modifier = Modifier, context: Context){
             )
         }
         composable("getCode") {
-            GetCode(navController = navController)
+            GetCode(navController = navController, context = context)
         }
         composable("homeScreen"){
             HomeScreen()
+        }
+        composable("createPassword"){
+            CreatePassword(navController = navController, context)
+        }
+        composable("createCard") {
+
         }
     }
 }

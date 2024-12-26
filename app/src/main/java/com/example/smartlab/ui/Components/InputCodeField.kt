@@ -1,5 +1,8 @@
 package com.example.smartlab.ui.Components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -9,61 +12,88 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
+import com.example.smartlab.code.SendSrCode
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
 
 @Composable
-fun InputCodeFiled(modifier: Modifier = Modifier, placeholder: String = "") {
-    var text by remember { mutableStateOf("") }
+fun InputCodeFiled(codeLength: Int = 6, email: String, navController: NavController) {
+    var code by remember { mutableStateOf("") }
+    val focusRequesters = remember { List(codeLength) { FocusRequester() } }
 
-    OutlinedTextField(
-        value = text,
-        onValueChange = {text = it},
-        modifier = modifier
-            .size(48.dp),
-        placeholder = {
-            Text(
-                text = placeholder,
-                modifier = Modifier.size(46.dp),
-                fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.nunito_semibold)),
-                lineHeight = 28.sp,
-                letterSpacing = 0.038.sp
+    Row(modifier = Modifier.height(48.dp)) {
+        for (i in 0 until codeLength) {
+            OutlinedTextField(
+                value = if (code.length > i) code[i].toString() else "",
+                onValueChange = { newValue ->
+                    code = if (newValue.length > 1){
+                        code
+                    }
+                    else (if (newValue.all { it.isDigit() } ) {
+                        val newCode = if (code.length > i){
+                            code.substring(0,i) + newValue + (if (i + 1 < code.length) code.substring(i+1) else "")
+                        } else  code + newValue
+
+                        if (newCode.length >= codeLength){
+                            SendSrCode(email, newCode, navController)
+                        } else newCode
+                    } else if (newValue.isEmpty() && code.length > i){
+                        val newCode =  code.substring(0,i) + (if (i+1 < code.length) code.substring(i+1) else "")
+                        newCode
+                    } else code).toString()
+
+                    if (code.length < codeLength && code.length > i){
+                        focusRequesters.getOrNull(i + 1)?.requestFocus()
+                    } else if (code.length <= i && code.isNotEmpty()) {
+                        focusRequesters.getOrNull(i)?.requestFocus()
+                    }
+                },
+                modifier = Modifier
+                    .width(46.dp)
+                    .focusRequester(focusRequesters[i]),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFF5F5F9),
+                    unfocusedContainerColor = Color(0xFFF5F5F9),
+                    disabledContainerColor =  Color(0xFFF5F5F9),
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black
+                )
             )
-        },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = InputBGColor,
-            unfocusedContainerColor = InputBGColor,
-            focusedPlaceholderColor = Color.Black.copy(alpha = 0.5f),
-            unfocusedPlaceholderColor = Color.Black.copy(alpha = 0.5f),
-            focusedBorderColor = InputFocusedBorderColor,
-            unfocusedBorderColor = InputStrokeColor,
-            cursorColor = AccentColor
-        ),
-        shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-    )
+            if (i < codeLength - 1) {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+        }
+    }
 }
 
 @Preview
 @Composable
 private fun InputCodeFiledPreview() {
-    InputCodeFiled()
+    InputCodeFiled(email = "", navController = rememberNavController())
 }
