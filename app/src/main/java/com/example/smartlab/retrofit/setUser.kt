@@ -1,10 +1,10 @@
-package com.example.smartlab.code
+package com.example.smartlab.retrofit
 
 import android.util.Log
-import com.example.smartlab.dataClasses.EmailSen
 import com.example.smartlab.dataClasses.ResponceCode
-import com.example.smartlab.dataClasses.User
+import com.example.smartlab.dataClasses.ResponseReg
 import com.example.smartlab.dataClasses.UserData
+import com.example.smartlab.dataClasses.auth_event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

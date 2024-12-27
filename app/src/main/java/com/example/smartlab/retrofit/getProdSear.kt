@@ -1,4 +1,4 @@
-package com.example.smartlab.code
+package com.example.smartlab.retrofit
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -12,11 +12,11 @@ import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun getProd(): State<List<Products>> {
+suspend fun getProdSear(searchText: String): State<List<Products>> {
     val prod = mutableStateOf<List<Products>>(emptyList())
     return withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
-            RetrofitHelper.usersInterface.getProducts()
+            RetrofitHelper.usersInterface.getProducts(searchText)
                 .enqueue(object : Callback<List<Products>> {
                     override fun onResponse(
                         call: Call<List<Products>>,

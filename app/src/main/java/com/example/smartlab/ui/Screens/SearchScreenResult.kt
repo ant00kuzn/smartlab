@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartlab.R
-import com.example.smartlab.code.RetrofitHelper.usersInterface
 import com.example.smartlab.ui.Components.SearchResultItem
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor

@@ -1,36 +1,10 @@
 package com.example.smartlab.ui.Screens
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.smartlab.R
-import com.example.smartlab.code.PreferencesManager
-import com.example.smartlab.code.getAct
-import com.example.smartlab.code.getCat
-import com.example.smartlab.code.getProd
-import com.example.smartlab.code.getProductsByCategory
-import com.example.smartlab.dataClasses.Actions
-import com.example.smartlab.dataClasses.Categories
-import com.example.smartlab.dataClasses.Products
-import com.example.smartlab.ui.Components.BottomNavigationBar
-import com.example.smartlab.ui.Components.CatalogSection
-import com.example.smartlab.ui.Components.NewsCard
-import com.example.smartlab.ui.theme.AccentColor
-import com.example.smartlab.ui.theme.InputBGColor
-import com.example.smartlab.ui.theme.InputFocusedBorderColor
-import com.example.smartlab.ui.theme.InputStrokeColor
-import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,8 +31,37 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.smartlab.R
+import com.example.smartlab.code.PreferencesManager
+import com.example.smartlab.retrofit.getAct
+import com.example.smartlab.retrofit.getCat
+import com.example.smartlab.retrofit.getProd
+import com.example.smartlab.retrofit.getProductsByCategory
+import com.example.smartlab.dataClasses.Actions
+import com.example.smartlab.dataClasses.Categories
+import com.example.smartlab.dataClasses.Products
+import com.example.smartlab.ui.Components.BottomNavigationBar
+import com.example.smartlab.ui.Components.CatalogSection
+import com.example.smartlab.ui.Components.NewsCard
+import com.example.smartlab.ui.theme.AccentColor
+import com.example.smartlab.ui.theme.InputBGColor
+import com.example.smartlab.ui.theme.InputFocusedBorderColor
+import com.example.smartlab.ui.theme.InputStrokeColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun HomeScreen(navController: NavController, context: Context) {
@@ -73,39 +76,54 @@ fun HomeScreen(navController: NavController, context: Context) {
     val coroutineScope = rememberCoroutineScope()
 
     val preferencesManager = remember { PreferencesManager(context) }
-    val textSt = remember { mutableStateOf(preferencesManager.getData("textState", "")) }
+    val txtState = remember { mutableStateOf(preferencesManager.getData("textState", "")) }
+
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            actionsList = getAct().value
+        coroutineScope.launch(Dispatchers.IO) { // Выполняем загрузку в IO-потоке
+            val fetchedActions = getAct().value
             val fetchedCategories = getCat().value
-            categoriesList = fetchedCategories
-            productsList = getProd().value
+            val fetchedProducts = getProd().value
 
-            // Select first category
-            if (fetchedCategories.isNotEmpty()){
-                selectedCategory = fetchedCategories.first()
-                productsList = getProductsByCategory(fetchedCategories.first().id).value
+            withContext(Dispatchers.Main) { // Возвращаемся в UI-поток для обновления состояния
+                actionsList = fetchedActions
+                categoriesList = fetchedCategories
+                productsList = fetchedProducts
+
+                // Select first category
+                if (categoriesList.isNotEmpty()) {
+                    selectedCategory = categoriesList.first()
+                    Log.v("dasdasdasd", categoriesList.first().id.toString())
+                    productsList = getProductsByCategory(categoriesList.first().id).value
+                }
             }
-
         }
     }
 
-    suspend fun onCategoryClick(category: Categories){
+    suspend fun onCategoryClick(category: Categories) {
         selectedCategory = category
-        productsList = getProductsByCategory(category.id).value
+        withContext(Dispatchers.IO) {
+            val fetchedProducts = getProductsByCategory(category.id).value
+            withContext(Dispatchers.Main){
+                productsList = fetchedProducts
+            }
+        }
     }
 
     Scaffold(
         modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection()),
         topBar = {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top=70.dp)
             ) {
                 // Поисковая строка
                 OutlinedTextField(
                     value = textState,
-                    onValueChange = { textState = it },
+                    onValueChange = {
+                        textState = it
+                        preferencesManager.saveData("textState", textState)
+                        txtState.value = textState
+                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Filled.Search,
@@ -115,8 +133,7 @@ fun HomeScreen(navController: NavController, context: Context) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ,
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     placeholder = {
                         Text(
                             text = "Искать анализы",
@@ -137,7 +154,6 @@ fun HomeScreen(navController: NavController, context: Context) {
                     shape = RoundedCornerShape(10.dp)
                 )
             }
-
         },
         bottomBar = {
             BottomNavigationBar(navController)
@@ -189,8 +205,12 @@ fun HomeScreen(navController: NavController, context: Context) {
     LaunchedEffect(scrollState.value) {
         isNewsVisible = scrollState.value <= 100
     }
+    LaunchedEffect(textState){
+        if(textState.isNotBlank()){
+            navController.navigate("startSearch")
+        }
+    }
 }
-
 
 @Preview
 @Composable

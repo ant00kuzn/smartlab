@@ -51,8 +51,12 @@ fun NewsCard(news: Actions) {
                 Text(
                     text = news.title,
                     color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily(Font(R.font.nunito_bold))
+                    fontSize = 20.sp,
+                    lineHeight = 28.sp,
+                    letterSpacing = 0.038.sp,
+                    softWrap = true,
+                    maxLines = 2,
+                    fontFamily = FontFamily(Font(R.font.nunito_black))
                 )
 
                 Column{
@@ -61,12 +65,14 @@ fun NewsCard(news: Actions) {
                         fontSize = if (news.description.length > 15) 12.sp else 14.sp,
                         fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                         color = Color.White,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier.padding(bottom = if (news.description.length > 15) 0.dp else 4.dp)
                     )
                     Text(
                         text = "${news.price} ₽",
                         color = Color.White,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
+                        lineHeight = 29.sp,
+                        letterSpacing = 0.038.sp,
                         fontFamily = FontFamily(Font(R.font.nunito_semibold))
                     )
                 }

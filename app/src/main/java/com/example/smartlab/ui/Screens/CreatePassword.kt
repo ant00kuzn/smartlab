@@ -25,32 +25,22 @@ import com.example.smartlab.R
 import com.example.smartlab.code.PreferencesManager
 import com.example.smartlab.code.sha256
 import com.example.smartlab.ui.Components.CustomButton
+import kotlinx.coroutines.coroutineScope
 
 
 @Composable
 fun CreatePassword(navController: NavHostController, context: Context) {
     val preferencesManager = remember { PreferencesManager(context) }
     val passwd = remember { mutableStateOf(preferencesManager.getData("guardPassword", "")) }
-//    val isGuardPasswd = remember { mutableStateOf(preferencesManager.getData("isGuardPassword", "")) }
-
 
     var password by remember { mutableStateOf("") }
     val maxPasswordLength = 4
 
-//    if (isGuardPasswd.value == ""){
-//        return
-//    }
-//
-//    if (isGuardPasswd.value == true.toString()){
-//        navController.navigate("createCard")
-//        return
-//    }
-
     Column(
         modifier = Modifier
-            .background(Color.White)
+            //.background(Color.White)
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(top = 84.dp, end = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -132,9 +122,7 @@ fun CreatePassword(navController: NavHostController, context: Context) {
 
             if (password.length == maxPasswordLength){
                 preferencesManager.saveData("guardPassword", sha256(password))
-                preferencesManager.saveData("isGuardPasswd", true.toString())
                 passwd.value = password
-//                isGuardPasswd.value = true.toString()
 
                 navController.navigate("createCard")
             }

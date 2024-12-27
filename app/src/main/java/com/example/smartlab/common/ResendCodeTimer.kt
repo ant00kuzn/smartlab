@@ -16,12 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartlab.R
-import com.example.smartlab.code.setUser
+import com.example.smartlab.dataClasses.auth_event
+import com.example.smartlab.retrofit.setUser
 import kotlinx.coroutines.delay
 
 @Composable
 fun ResendCodeTimer(email: String, password: String) {
     var secondsLeft by remember { mutableStateOf(120) }
+    var s: auth_event = auth_event("")
 
     LaunchedEffect(Unit) {
         while (secondsLeft > 0) {

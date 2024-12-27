@@ -16,10 +16,10 @@ import com.example.smartlab.dataClasses.NavigationItem
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        NavigationItem("Анализы", "home", Icons.AutoMirrored.Filled.List),
-        NavigationItem("Результаты", "results", Icons.Filled.Settings),
-        NavigationItem("Поддержка", "support", Icons.Filled.Phone),
-        NavigationItem("Профиль", "profile", Icons.Filled.Person)
+        NavigationItem("Анализы", "homeScreen", Icons.AutoMirrored.Filled.List),
+        NavigationItem("Результаты", "", Icons.Filled.Settings),
+        NavigationItem("Поддержка", "", Icons.Filled.Phone),
+        NavigationItem("Профиль", "ProfileScreen", Icons.Filled.Person)
     )
 
     NavigationBar {

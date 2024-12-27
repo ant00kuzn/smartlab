@@ -40,14 +40,14 @@ fun CatalogSection(
     onCategoryClick: suspend (Categories) -> Unit
 ) {
     var coroutine = rememberCoroutineScope()
-    var expandedHeight by remember { mutableStateOf(150.dp) } // Изначальная высота блока
+    var expandedHeight by remember { mutableStateOf(150.dp) }
     val density = LocalDensity.current
-    val maxExpandedHeight =  density.run{ 500.dp.toPx()} // Максимальная высота всего блока
-    val minExpandedHeight = density.run { 150.dp.toPx() }
+    val maxExpandedHeight =  density.run{ 1000.dp.toPx()}
+    val minExpandedHeight = density.run { 335.dp.toPx() }
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
+                val delta = available.y - 200
                 val newHeight = (expandedHeight.value - delta).coerceIn(minExpandedHeight, maxExpandedHeight).dp
 
                 if (newHeight != expandedHeight)
@@ -84,10 +84,12 @@ fun CatalogSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(categoriesList) { category ->
-                CategoryButton(text = category.name, onClick = {
+                CategoryButton(
+                    text = category.name,
+                    onClick = {
                     coroutine.launch{onCategoryClick(category)}
-                }, isSelected = selectedCategory == category)
-
+                },
+                    isSelected = selectedCategory == category)
             }
         }
 

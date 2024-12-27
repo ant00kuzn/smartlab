@@ -1,9 +1,9 @@
-package com.example.smartlab.code
+package com.example.smartlab.retrofit
 
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.smartlab.dataClasses.Categories
+import com.example.smartlab.dataClasses.Products
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -12,35 +12,35 @@ import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun getCat(): State<List<Categories>> {
-    val cat = mutableStateOf<List<Categories>>(emptyList())
+suspend fun getProd(): State<List<Products>> {
+    val prod = mutableStateOf<List<Products>>(emptyList())
     return withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
-            RetrofitHelper.usersInterface.getCat()
-                .enqueue(object : Callback<List<Categories>> {
+            RetrofitHelper.usersInterface.getProducts()
+                .enqueue(object : Callback<List<Products>> {
                     override fun onResponse(
-                        call: Call<List<Categories>>,
-                        response: Response<List<Categories>>
+                        call: Call<List<Products>>,
+                        response: Response<List<Products>>
                     ) {
                         if (response.isSuccessful) {
-                            response.body()?.let { category ->
-                                cat.value = category
+                            response.body()?.let { product ->
+                                prod.value = product
                                 continuation.resume(Unit)
                             }
                         } else {
                             Log.e("getAct", "Response was not successful: ${response.errorBody()?.string()}")
-                            cat.value = emptyList()
+                            prod.value = emptyList()
                             continuation.resume(Unit)
                         }
                     }
 
-                    override fun onFailure(call: Call<List<Categories>>, t: Throwable) {
+                    override fun onFailure(call: Call<List<Products>>, t: Throwable) {
                         Log.e("getAct", "Failure getting actions: ${t.message}", t)
-                        cat.value = emptyList()
+                        prod.value = emptyList()
                         continuation.resume(Unit)
                     }
                 })
         }
-        cat
+        prod
     }
 }

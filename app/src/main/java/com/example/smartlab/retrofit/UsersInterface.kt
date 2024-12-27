@@ -1,10 +1,11 @@
-package com.example.smartlab.code
+package com.example.smartlab.retrofit
 
 import com.example.smartlab.dataClasses.Actions
 import com.example.smartlab.dataClasses.Categories
+import com.example.smartlab.dataClasses.PatientCard
 import com.example.smartlab.dataClasses.Products
 import com.example.smartlab.dataClasses.ResponceCode
-import com.example.smartlab.dataClasses.SearchResult
+import com.example.smartlab.dataClasses.ResponseReg
 import com.example.smartlab.dataClasses.UserData
 import com.example.smartlab.dataClasses.User
 import retrofit2.Call
@@ -23,6 +24,13 @@ interface UsersInterface {
     )
     @POST("auth/v1/signup")
     fun setUser(@Body user: UserData): Call<ResponceCode>
+
+    //create patient card
+    @Headers(
+        "apikey: $apiKey"
+    )
+    @POST("rest/v1/users")
+    fun setUserCard(@Body patient: PatientCard): Call<ResponceCode>
 
     @Headers(
         "apikey: $apiKey"

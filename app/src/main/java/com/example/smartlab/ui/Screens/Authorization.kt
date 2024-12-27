@@ -2,7 +2,6 @@ package com.example.smartlab.ui.Screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,7 +26,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,8 +49,10 @@ import com.example.smartlab.R
 import com.example.smartlab.code.isValidEmail
 import com.example.smartlab.code.sha256
 import com.example.smartlab.code.PreferencesManager
-import com.example.smartlab.code.checkAuth
-import com.example.smartlab.code.setUser
+import com.example.smartlab.dataClasses.auth_event
+import com.example.smartlab.dataClasses.checkUser
+import com.example.smartlab.retrofit.checkAuth
+import com.example.smartlab.retrofit.setUser
 import com.example.smartlab.ui.Components.PrimaryButton
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
@@ -91,7 +91,6 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
 
     Column(
         modifier = Modifier
-            .background(Color.White)
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ){
@@ -216,8 +215,12 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                     setUser(textEmail, sha256(textPassword))
                     navController.navigate("getCode")
                 }else{
-                    checkAuth(textEmail, sha256(textPassword))
-                    navController.navigate("createPassword")
+                    isErrorState = checkAuth(textEmail, sha256(textPassword))
+                    if(isErrorState) {
+                        navController.navigate("createPassword")
+                    } else{
+                        Toast.makeText(context, "Login/password incorrect", Toast.LENGTH_LONG).show()
+                    }
                 }
             },
             text = "Далее",
