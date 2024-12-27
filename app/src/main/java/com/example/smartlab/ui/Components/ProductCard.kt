@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -26,18 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartlab.R
-import com.example.smartlab.dataClasses.ServiceItem
+import com.example.smartlab.dataClasses.Products
 import com.example.smartlab.ui.theme.InputBGColor
 
 @Composable
-fun ServiceCard(modifier: Modifier = Modifier, service: ServiceItem) {
+fun ProductCard(modifier: Modifier = Modifier, product: Products) {
     Card(
         modifier = modifier.width(335.dp).height(136.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = InputBGColor)
     ) {
         Text(
-            text = service.name,
+            text = product.name,
             modifier = Modifier.fillMaxWidth().weight(1f).padding(16.dp),
             fontSize = 16.sp,
             softWrap = true,
@@ -56,14 +55,14 @@ fun ServiceCard(modifier: Modifier = Modifier, service: ServiceItem) {
             )
             {
                 Text(
-                    text = "${service.days}",
+                    text = "${product.time} дня",
                     fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                     color = Color(0x80000000),
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${service.price} ₽",
+                    text = "${product.price} ₽",
                     fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                     color = Color.Black,
                     fontSize = 14.sp
@@ -85,7 +84,7 @@ fun ServiceCard(modifier: Modifier = Modifier, service: ServiceItem) {
                 )
             ) {
                 Text(
-                    text = service.buttonText,
+                    text = "Добавить",
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                     color = Color.White,
@@ -98,6 +97,6 @@ fun ServiceCard(modifier: Modifier = Modifier, service: ServiceItem) {
 
 @Preview
 @Composable
-private fun ServiceCardPrev() {
-    ServiceCard(service = ServiceItem("sadfas", "32 fsdf", "1800", "Добавить"))
+private fun ProductCardPrev() {
+    ProductCard(product = Products(1, "sadfas", 1, 32, "1800"))
 }

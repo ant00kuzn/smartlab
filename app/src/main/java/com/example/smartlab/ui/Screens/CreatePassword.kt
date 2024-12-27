@@ -31,7 +31,7 @@ import com.example.smartlab.ui.Components.CustomButton
 fun CreatePassword(navController: NavHostController, context: Context) {
     val preferencesManager = remember { PreferencesManager(context) }
     val passwd = remember { mutableStateOf(preferencesManager.getData("guardPassword", "")) }
-    //val isGuardPasswd = remember { mutableStateOf(preferencesManager.getData("isGuardPassword", "")) }
+//    val isGuardPasswd = remember { mutableStateOf(preferencesManager.getData("isGuardPassword", "")) }
 
 
     var password by remember { mutableStateOf("") }
@@ -134,7 +134,7 @@ fun CreatePassword(navController: NavHostController, context: Context) {
                 preferencesManager.saveData("guardPassword", sha256(password))
                 preferencesManager.saveData("isGuardPasswd", true.toString())
                 passwd.value = password
-                //isGuardPasswd.value = true.toString()
+//                isGuardPasswd.value = true.toString()
 
                 navController.navigate("createCard")
             }

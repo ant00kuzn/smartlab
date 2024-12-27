@@ -12,6 +12,7 @@ import com.example.smartlab.ui.Screens.Authorization
 import com.example.smartlab.ui.Screens.CreateCard
 import com.example.smartlab.ui.Screens.GetCode
 import com.example.smartlab.ui.Screens.HomeScreen
+import com.example.smartlab.ui.Screens.SearchScreen
 
 @Composable
 fun Navigation(modifier: Modifier = Modifier, context: Context){
@@ -43,13 +44,16 @@ fun Navigation(modifier: Modifier = Modifier, context: Context){
             GetCode(navController = navController, context = context)
         }
         composable("homeScreen"){
-            HomeScreen(navController)
+            HomeScreen(navController, context)
         }
         composable("createPassword"){
             CreatePassword(navController = navController, context)
         }
         composable("createCard") {
             CreateCard(navController = navController)
+        }
+        composable("startSearch") {
+            SearchScreen(navController = navController, context = context)
         }
     }
 }

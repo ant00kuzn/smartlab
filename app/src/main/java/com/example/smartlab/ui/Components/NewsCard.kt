@@ -58,7 +58,7 @@ fun NewsCard(news: Actions) {
                 Column{
                     Text(
                         text = news.description,
-                        fontSize = 14.sp,
+                        fontSize = if (news.description.length > 15) 12.sp else 14.sp,
                         fontFamily = FontFamily(Font(R.font.nunito_semibold)),
                         color = Color.White,
                         modifier = Modifier.padding(bottom = 4.dp)

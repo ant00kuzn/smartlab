@@ -3,7 +3,7 @@ package com.example.smartlab.code
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.smartlab.dataClasses.Actions
+import com.example.smartlab.dataClasses.Categories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -12,35 +12,35 @@ import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun getAct(): State<List<Actions>> {
-    val act = mutableStateOf<List<Actions>>(emptyList())
+suspend fun getCat(): State<List<Categories>> {
+    val cat = mutableStateOf<List<Categories>>(emptyList())
     return withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
-            RetrofitHelper.usersInterface.getActions()
-                .enqueue(object : Callback<List<Actions>> {
+            RetrofitHelper.usersInterface.getCat()
+                .enqueue(object : Callback<List<Categories>> {
                     override fun onResponse(
-                        call: Call<List<Actions>>,
-                        response: Response<List<Actions>>
+                        call: Call<List<Categories>>,
+                        response: Response<List<Categories>>
                     ) {
                         if (response.isSuccessful) {
-                            response.body()?.let { actions ->
-                                act.value = actions
+                            response.body()?.let { category ->
+                                cat.value = category
                                 continuation.resume(Unit)
                             }
                         } else {
                             Log.e("getAct", "Response was not successful: ${response.errorBody()?.string()}")
-                            act.value = emptyList()
+                            cat.value = emptyList()
                             continuation.resume(Unit)
                         }
                     }
 
-                    override fun onFailure(call: Call<List<Actions>>, t: Throwable) {
+                    override fun onFailure(call: Call<List<Categories>>, t: Throwable) {
                         Log.e("getAct", "Failure getting actions: ${t.message}", t)
-                        act.value = emptyList()
+                        cat.value = emptyList()
                         continuation.resume(Unit)
                     }
                 })
         }
-        act
+        cat
     }
 }

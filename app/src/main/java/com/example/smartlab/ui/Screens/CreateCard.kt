@@ -109,7 +109,7 @@ fun CreateCard(modifier: Modifier = Modifier, navController: NavController) {
                     fontSize = 15.sp,
                     lineHeight = 20.sp,
                     textAlign = TextAlign.Right,
-                    //fontFamily = FontFamily(Font(R.font.nunito))
+                    fontFamily = FontFamily(Font(R.font.nunito))
                 ),
                 color = Color(0xFF1A6FEE)
             )

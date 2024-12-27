@@ -56,7 +56,6 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.v100)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.accompanist.swiperefresh)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,7 +1,8 @@
 package com.example.smartlab.code
 
 import com.example.smartlab.dataClasses.Actions
-import com.example.smartlab.dataClasses.EmailSen
+import com.example.smartlab.dataClasses.Categories
+import com.example.smartlab.dataClasses.Products
 import com.example.smartlab.dataClasses.ResponceCode
 import com.example.smartlab.dataClasses.SearchResult
 import com.example.smartlab.dataClasses.UserData
@@ -36,26 +37,33 @@ interface UsersInterface {
     @POST("auth/v1/token?grant_type=password")
     fun checkAuth(@Body user: UserData): Call<ResponceCode>
 
-    //search
+    //category product
     @Headers(
         "apikey: $apiKey"
     )
     @GET("rest/v1/products?select=*")
-    fun getProducts(@Query("name") queryString: String): List<SearchResult>
+    fun getProducts(@Query("category_id") catId: Int): Call<List<Products>>
+
+    //search product
+    @Headers(
+        "apikey: $apiKey"
+    )
+    @GET("rest/v1/products?select=*")
+    fun getProducts(@Query("name") search: String): Call<List<Products>>
 
     //products
     @Headers(
         "apikey: $apiKey"
     )
     @GET("rest/v1/products?select=*")
-    fun getProducts(): List<SearchResult>
+    fun getProducts(): Call<List<Products>>
 
-    //services
+    //categories
     @Headers(
         "apikey: $apiKey"
     )
-    @GET("rest/v1/services?select=*")
-    fun getServices(): List<SearchResult>
+    @GET("rest/v1/categories?select=*")
+    fun getCat(): Call<List<Categories>>
 
     //actions
     @Headers(

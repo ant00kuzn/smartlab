@@ -1,8 +1,9 @@
 package com.example.smartlab.dataClasses
 
-data class ServiceItem(
+data class Products(
+    val id: Int,
     val name: String,
-    val days: String,
-    val price: String,
-    val buttonText: String
+    val category_id: Int,
+    val time: Int,
+    val price: String
 )

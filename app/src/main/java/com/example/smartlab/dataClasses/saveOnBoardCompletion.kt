@@ -12,6 +12,9 @@ class PreferencesManager(context: Context) {
         editor.putString(key, value)
         editor.putString(key, value)
         editor.putString(key, value)
+        editor.putString(key, value)
+        editor.putString(key, value)
+        editor.putString(key, value)
         editor.apply()
     }
 

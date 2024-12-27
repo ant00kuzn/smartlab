@@ -8,13 +8,13 @@ import java.net.Proxy
 
 
 object RetrofitHelper {
-    val proxy: Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("10.207.106.169", 3128))
-    val httpClient: OkHttpClient = OkHttpClient.Builder().proxy(proxy).build()
+    //val proxy: Proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("10.207.106.169", 3128))
+    //val httpClient: OkHttpClient = OkHttpClient.Builder().proxy(proxy).build()
 
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://hneasxqgfytbujbeacpq.supabase.co/")
         .addConverterFactory(GsonConverterFactory.create())
-        .client(httpClient)
+        //.client(httpClient)
         .build()
 
     val usersInterface: UsersInterface = retrofit.create(UsersInterface::class.java)

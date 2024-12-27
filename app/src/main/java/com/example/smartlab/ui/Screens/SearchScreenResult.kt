@@ -32,7 +32,6 @@ fun SearchScreenResults() {
     var isLoading by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-
     LaunchedEffect(textState) {
         if (textState.length >= 3) {
             isLoading = true
