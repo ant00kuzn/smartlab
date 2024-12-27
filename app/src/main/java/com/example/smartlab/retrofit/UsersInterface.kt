@@ -45,18 +45,11 @@ interface UsersInterface {
     @POST("auth/v1/token?grant_type=password")
     fun checkAuth(@Body user: UserData): Call<ResponceCode>
 
-    //category product
-    @Headers(
-        "apikey: $apiKey"
-    )
-    @GET("rest/v1/products?select=*")
-    fun getProducts(@Query("category_id") catId: Int): Call<List<Products>>
-
     //search product
     @Headers(
         "apikey: $apiKey"
     )
-    @GET("rest/v1/products?select=*")
+    @POST("rest/v1/products?select=*")
     fun getProducts(@Query("name") search: String): Call<List<Products>>
 
     //products

@@ -77,15 +77,15 @@ fun NewsCard(news: Actions) {
                     )
                 }
             }
-
-            Image(
-                painter =  painterResource(id = R.drawable.hello),
-                contentDescription = null,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 10.dp),
-                contentScale = ContentScale.Crop
-            )
+//
+//            Image(
+//                painter =  null,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(end = 10.dp),
+//                contentScale = ContentScale.Crop
+//            )
         }
     }
 }
@@ -93,5 +93,5 @@ fun NewsCard(news: Actions) {
 @Preview
 @Composable
 private fun NewsCardPrev() {
-    NewsCard(news = Actions(1, "Anything", "Nothing", 1000, "R.drawable.shape"))
+    NewsCard(news = Actions(1, "Anything nfsdjfnsdjkfnjksdnfj", "Nothing sfjdohfjsdfjsdf", 50000, "R.drawable.shape"))
 }

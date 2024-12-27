@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,13 +46,18 @@ import com.example.smartlab.R
 import com.example.smartlab.code.PreferencesManager
 import com.example.smartlab.retrofit.getProdSear
 import com.example.smartlab.dataClasses.Products
+import com.example.smartlab.retrofit.getAct
+import com.example.smartlab.retrofit.getCat
+import com.example.smartlab.retrofit.getProd
 import com.example.smartlab.ui.Components.ClearIcon
 import com.example.smartlab.ui.Components.ProductCard
 import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, context: Context) {
@@ -59,8 +65,17 @@ fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, co
     val textState = remember { mutableStateOf(preferencesManager.getData("textState", "")) }
     var productsList by remember { mutableStateOf<List<Products>>(emptyList()) }
     val coroutineScope = rememberCoroutineScope()
+    var searchText by remember { mutableStateOf(textState.value) }
 
-    var text = textState.value
+    LaunchedEffect(Unit) {
+        coroutineScope.launch(Dispatchers.IO) {
+            val fetchedProducts = getProd().value
+
+            withContext(Dispatchers.Main) {
+                productsList = fetchedProducts
+            }
+        }
+    }
 
     Column(modifier = Modifier
         .background(Color.White)
@@ -72,12 +87,15 @@ fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, co
                 .padding(vertical = 16.dp)
         ) {
             OutlinedTextField(
-                value = text,
+                value = searchText,
                 onValueChange = {
-                    text = it
-                    if (text.length > 3) {
+                    searchText = it
+
+                    if (searchText.length >= 3) {
                         coroutineScope.launch {
-                            productsList = getProdSear(text).value
+                            productsList = productsList.filter { product ->
+                                product.name.lowercase().contains(searchText.lowercase()) //filter
+                            }
                         }
                     }
                 },
@@ -85,7 +103,9 @@ fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, co
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp).clickable {
+                            searchText = ""
+                        }
                     )
                 },
                 modifier = Modifier
@@ -108,7 +128,7 @@ fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, co
             Text(
                 text = "Отменить",
                 modifier = with(Modifier.align(Alignment.CenterVertically)) {
-                    clickable { navController.navigate("homeScreen") }
+                    clickable { navController.popBackStack() }
                         .weight(0.5f)
                 },
                 style = TextStyle(
@@ -128,10 +148,7 @@ fun SearchScreen(modifier: Modifier = Modifier, navController: NavController, co
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        LazyColumn() {
             items(productsList) { product ->
                 ProductCard(
                     modifier = Modifier.padding(16.dp),

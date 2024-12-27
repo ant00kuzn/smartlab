@@ -38,9 +38,9 @@ fun CreatePassword(navController: NavHostController, context: Context) {
 
     Column(
         modifier = Modifier
-            //.background(Color.White)
+            .background(Color.White)
             .fillMaxSize()
-            .padding(top = 84.dp, end = 16.dp)
+            .padding(top = 55.dp, end = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

@@ -26,6 +26,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,22 +60,35 @@ import com.example.smartlab.ui.theme.AccentColor
 import com.example.smartlab.ui.theme.InputBGColor
 import com.example.smartlab.ui.theme.InputFocusedBorderColor
 import com.example.smartlab.ui.theme.InputStrokeColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-@SuppressLint("RememberReturnType")
 @Composable
-fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUnderBut: String, textLink: String, navController: NavController, context: Context) {
-    var textPassword by remember { mutableStateOf("") }
-    var textEmail by remember { mutableStateOf("") }
+fun Authorization(
+    modifier: Modifier = Modifier,
+    textDescription: String,
+    textUnderBut: String,
+    textLink: String,
+    navController: NavController,
+    context: Context
+) {
+    val coroutineScope = rememberCoroutineScope()
 
-    val preferencesManager = remember { PreferencesManager(context) }
+    var textPassword by rememberSaveable { mutableStateOf("") }
+    var textEmail by rememberSaveable { mutableStateOf("") }
+
+    val preferencesManager = remember(context) { PreferencesManager(context) }
     val data = remember { mutableStateOf(preferencesManager.getData("isCompleted", false.toString())) }
     val email = remember { mutableStateOf(preferencesManager.getData("email", "")) }
     val passHash = remember { mutableStateOf(preferencesManager.getData("password", "")) }
 
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val icon = if (passwordVisible) R.drawable.eye_open else R.drawable.eye_closed
 
-    var isErrorState by remember { mutableStateOf(false) }
+    var isErrorState by rememberSaveable { mutableStateOf(false) }
+
+    var authResult by remember { mutableStateOf<Boolean?>(null) }
 
     LaunchedEffect(textEmail){
         isErrorState = !isValidEmail(textEmail)
@@ -91,6 +106,7 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
 
     Column(
         modifier = Modifier
+            .background(Color.White)
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ){
@@ -211,15 +227,24 @@ fun Authorization(modifier: Modifier = Modifier, textDescription: String, textUn
                 .height(56.dp)
                 .fillMaxWidth(),
             onClick = {
-                if (textLink == "Войти") {
-                    setUser(textEmail, sha256(textPassword))
-                    navController.navigate("getCode")
-                }else{
-                    isErrorState = checkAuth(textEmail, sha256(textPassword))
-                    if(isErrorState) {
-                        navController.navigate("createPassword")
-                    } else{
-                        Toast.makeText(context, "Login/password incorrect", Toast.LENGTH_LONG).show()
+                authResult = null
+
+                coroutineScope.launch(Dispatchers.IO) {
+                    try {
+                        val response = checkAuth(textEmail, sha256(textPassword))
+
+                        withContext(Dispatchers.Main) {
+                            if (response) {
+                                navController.navigate("createPassword")
+                            } else {
+                                Toast.makeText(context, "Login/password incorrect", Toast.LENGTH_LONG).show()
+                            }
+                            authResult = response
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(context, "Error during authorization: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             },

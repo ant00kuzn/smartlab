@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,25 +32,26 @@ import com.example.smartlab.ui.theme.InputBGColor
 @Composable
 fun ProductCard(modifier: Modifier = Modifier, product: Products) {
     Card(
-        modifier = modifier.width(335.dp).height(136.dp),
+        modifier = modifier.fillMaxWidth().height(136.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = InputBGColor)
     ) {
         Text(
             text = product.name,
-            modifier = Modifier.fillMaxWidth().weight(1f).padding(16.dp),
+            modifier = Modifier.fillMaxSize().weight(1f).padding(top = 16.dp, start = 16.dp, end = 16.dp),
             fontSize = 16.sp,
             softWrap = true,
             maxLines = 2,
             lineHeight = 20.sp,
             letterSpacing = -0.032.sp,
-            fontFamily = FontFamily(Font(R.font.nunito_semibold))
+            fontFamily = FontFamily(Font(R.font.nunito_semibold)),
+            color = Color.Black
         )
 
-        Row(modifier = Modifier.weight(1f).width(335.dp).fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier.weight(1f).fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp),
+                    .padding(start = 16.dp, bottom = 4.dp),
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.Start
             )
@@ -73,7 +75,7 @@ fun ProductCard(modifier: Modifier = Modifier, product: Products) {
                 onClick = {},
                 modifier = Modifier
                     .padding(end = 1.dp)
-                    .width(114.dp)
+                    .width(125.dp)
                     .height(40.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonColors(
